@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en"
+xmlns:tal="http://xml.zope.org/namespaces/tal"
+xmlns:metal="http://xml.zope.org/namespaces/metal">
+
+<head>
+	<title>${pagetitle}</title>
+	<link rel="stylesheet" type="text/css" href="${request.static_url('easydb_urls:static/css/local.css')}">
+	<link rel="stylesheet" type="text/css" href="${request.static_url('easydb_urls:static/css/page.css')}">
+    <link rel="shortcut icon" type="image/png" href="/favicon.ico" id="favicon"/>
+</head>
+<body>
+	<header class="topbar">
+		<div class="wrapper">
+			<div class="topbar-wrapper">
+				<img height="70" width="217" src="${request.application_url}/static/LIB_easydb_api_logo.svg">
+				<a class="link">
+					<span>${pagetitle}</span>
+				</a>
+				<div tal:condition="python: authenticated is True" id="logout">
+					<form action="${request.application_url}/sessionlogout" method="post">
+						<input type="submit" name="form.submitted" value="Log Out" class="submit_small" />
+					</form>
+				</div>
+				<div tal:condition="python: authenticated is False" id="login">
+					<form action="${request.application_url}/sessionlogin" method="post">
+						<label for="user">User:</label>
+						<input type="text" id="userinput" name="user" value=""/><br/>
+						<label for="password">Password:</label>
+						<input type="password" id="passwordinput" name="password" value=""/><br/>
+						<input type="submit" name="form.submitted" value="Log In" class="submit_small" />
+					</form>
+				</div>
+		</div>
+	</header>
+
+	<br />
+	<section>
+		<form action="${request.application_url}/assets" method="GET" >
+			<fieldset>
+				<legend>Search</legend>
+				<div>
+					<!--<dfn class="tooltip">-->
+						<span tal:condition="python: len(searchterms) <= 0 or searchterms['search'] == ''">
+							<input id="search_terms" type="text" name="search"/><input type="submit" value="Search"/>
+						</span>
+						<span tal:condition="python: len(searchterms) > 0 and searchterms['search'] != ''">
+							<input id="search_terms" type="text" name="search" value="${searchterms['search']}"/><input type="submit" value="Search"/>
+						</span>
+						<!--<span class="smallparagraph" rel="tooltip">Search terms separated by a white space will be connected by an AND operator, terms separated by a semi-colon will be connected by an or OR operator.</span>-->
+					<!--</dfn>-->
+				</div>
+			</fieldset>
+		</form>
+	</section>
+	<br />
+	<div metal:use-macro="load: ./paging_macro.pt"></div>
+	<div tal:define="resultnum len(resultdicts)">
+		<p>Number of entries: ${resultcount}</p>
+	</div>
+	<section tal:condition="len(resultdicts) > 0">
+		<br/ >
+		<table>
+			<thead>
+				<th>Preview</th><th>Image link(s)</th><th>EasyDB page</th><th>Accession number</th><th>Species</th><th>Collected at</th>
+			</thead>
+			<tbody class="outertable">
+				<div tal:repeat="obj resultdicts">
+					<tr>
+						<td>
+							<div  tal:condition="python: 'preview_url' in obj" class="imagearea">
+								<div tal:define="imagenum repeat.obj.number" id="img_${imagenum}" class="preview_images">
+									<img tal:condition="obj['preview_url']" src="${obj['preview_url']}" width="150px" alt="preview image for found images" />
+									<span tal:condition="python: obj['preview_url'] is None">No image available</span>
+								</div>
+							</div>
+						</td>
+						<td>
+							<table>
+								<tr tal:repeat="version obj['versions']">
+									<td><a href="${version['url']}">${version['size']}</a></td><td class="urlfield"><input type="url" size="20" value="${version['url']}"></td>
+								</tr>
+							</table>
+						</td>
+						<td>
+							<div tal:condition="python: 'identifier' in obj" class="easydburl">
+								<div tal:condition="python: 'title' in obj">
+									<a href="${baseurl}/detail/${obj['identifier']}">${obj['title']}</a>
+								</div>
+								<a tal:condition="python: 'title' not in obj" href="${baseurl}/detail/${obj['identifier']}">${baseurl}/detail/${obj['identifier']}</a>
+							</div>
+						</td>
+						<td>
+							<div tal:condition="python: 'accessionnumber' in obj" class="accessionnumber">
+								<a href="https://id.zfmk.de/collection_ZFMK/?AccessionNumber=${obj['accessionnumber']}">${obj['accessionnumber']}</a>
+							</div>
+						</td>
+						<td>
+							<div tal:condition="python: 'speciesname' in obj" class="speciesname">
+								${structure: obj['speciesname']}
+							</div>
+						</td>
+						<td>
+							<div tal:condition="python: 'locality' in obj" class="locality">
+								${obj['locality']}
+							</div>
+						</td>
+					</tr>
+				</div>
+			</tbody>
+		</table>
+	</section>
+</body>
+</html>

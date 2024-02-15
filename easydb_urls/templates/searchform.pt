@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en"
+xmlns:tal="http://xml.zope.org/namespaces/tal"
+xmlns:metal="http://xml.zope.org/namespaces/metal">
+
+<head>
+	<title>${pagetitle}</title>
+	<link rel="stylesheet" type="text/css" href="${request.static_url('easydb_urls:static/css/local.css')}">
+	<link rel="stylesheet" type="text/css" href="${request.static_url('easydb_urls:static/css/page.css')}">
+    <link rel="shortcut icon" type="image/png" href="/favicon.ico" id="favicon"/>
+
+</head>
+
+<body>
+	
+	<div class="flex_spacebetween_top">
+		<div>
+			<h2>${pagetitle}</h2>
+		</div>
+		
+		<div tal:condition="python: authenticated is True" id="logout">
+			<form action="${request.application_url}/sessionlogout" method="post">
+				<input type="submit" name="form.submitted" value="Log Out" class="submit_small" />
+			</form>
+		</div>
+		<div tal:condition="python: authenticated is False" id="login">
+			<form action="${request.application_url}/sessionlogin" method="post">
+				<label for="user">User</label><br/>
+				<input type="text" id="userinput" name="user" value=""/><br/>
+				<label for="password">Password</label><br/>
+				<input type="password" id="passwordinput" name="password" value=""/><br/>
+				<input type="submit" name="form.submitted" value="Log In" class="submit_small" />
+			</form>
+			<!--<form action="${request.application_url}/login" method="post">
+				<input type="submit" name="form.submitted" value="Log In"/>
+			</form>-->
+		</div>
+	</div>
+	
+	<br />
+	
+	<div>
+		<form action="${request.application_url}/searchDispatcher" method="GET" >
+		
+		<fieldset>
+		<label for="search_terms">Search</label>
+		<br />
+		<input id="search_terms" type="text" name="search"/>
+		<noscript>
+		<p class="small">multiple terms can be inserted, separated by a semi-colon. The search will add all found results for a single term (disjunct search)</p>
+		</noscript>
+		</fieldset>
+		
+		<label>Show results as:</label><br />
+		<input id="radio_json" type="radio" name="representation" value="json" /><label for="radio_json">JSON</label><br />
+		<input id="radio_html" type="radio" name="representation" value="html" checked="checked"/><label for="radio_html">HTML</label><br />
+		
+		<p><input type="submit" value="Search"/><input type="reset" value="Reset values"></p>
+		</form>
+	</div>
+
+</body>
+</html>
+ 

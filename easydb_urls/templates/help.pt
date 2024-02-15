@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en"
+xmlns:tal="http://xml.zope.org/namespaces/tal"
+xmlns:metal="http://xml.zope.org/namespaces/metal">
+
+<head>
+	<title>${pagetitle}</title>
+	<link rel="stylesheet" type="text/css" href="${request.static_url('easydb_urls:static/css/local.css')}">
+	<link rel="stylesheet" type="text/css" href="${request.static_url('easydb_urls:static/css/page.css')}">
+    <link rel="shortcut icon" type="image/png" href="/favicon.ico" id="favicon"/>
+
+</head>
+
+<body>
+	<h1>${pagetitle}</h1>
+
+	<h3>Goal</h3>
+	<p>This page allows you to search for assets in the easydb by various terms like accession numbers, species names, authors.</p>
+
+	
+	
+	<h3>Examples</h3>
+	<h4>Search via web page:</h4>
+	<ul>
+		<li><a href="${applicationurl}/search">${applicationurl}/search</a></li>
+	</ul>
+	<h4>Search via URL:</h4>
+	<ul>
+		<li>get all entries containing the species <em>Zoropsis spinimana</em>: <br /><a href="${applicationurl}/assets?search=Zoropsis spinimana">${applicationurl}/assets?search=Zoropsis spinimana</a></li>
+		<li>get first 1000 entries that were collected in Hessen: <br /><a href="${applicationurl}/assets?search=Hessen">${applicationurl}/assets?search=Hessen</a></li>
+		<li>get entries 150 - 200 of the GBOL project: <br /><a href="${applicationurl}/assets?search=GBOL&pagesize=50&page=4">${applicationurl}/assets?search=GBOL&pagesize=50&page=13</a></li>
+		<li>get all entries for the accession number ZFMK-TIS-20799: <br /><a href="${applicationurl}/assets?search=ZFMK-TIS-20799">${applicationurl}/assets?search=ZFMK-TIS-20799</a></li>
+		<li>get all entries containing the species <em>Zoropsis spinimana</em> or the genus <em>Cixius</em>: <br /><a href="${applicationurl}/assets?search=Zoropsis spinimana&search=Cixius">${applicationurl}/assets?search=Zoropsis spinimana&search=Cixius</a></li>
+	</ul>
+	<h4>Get search results as csv or json file</h4>
+	<ul>
+		<li>get all entries containing the species <em>Zoropsis spinimana</em> as json-file: <br /><a href="${applicationurl}/json/assets?search=Zoropsis spinimana">${applicationurl}/json/assets?search=Zoropsis spinimana</a></li>
+		<li>get first 1000 entries of the GBOL project as csv-file: <br /><a href="${applicationurl}/csv/assets?search=GBOL">${applicationurl}/csv/assets?search=GBOL</a></li>
+	</ul>
+	
+	<h4>Get an asset by its file name</h4>
+	<ul>
+		<li>get the image file <em>ZFMK_79.tif</em>: <br /><a href="${applicationurl}/res/ZFMK_79.tif">${applicationurl}/res/ZFMK_79.tif</a></li>
+		<li>get the zip file <em>ZFMK Lepidoptera collection.ABCD_GGBN_05_11_18.zip</em>: <br /><a href="${applicationurl}/res/ZFMK Lepidoptera collection.ABCD_GGBN_05_11_18.zip">${applicationurl}/res/ZFMK Lepidoptera collection.ABCD_GGBN_05_11_18.zip</a></li>
+	</ul>
+	<h4>Open the easydb page belonging to an item</h4>
+	<ul>
+		<li>get the first page in easydb that contains a <em>Cixius</em> species sample: <br /><a href="${applicationurl}/easyPage?search=Cixius">${applicationurl}/easyPage?search=Cixius</a></li>
+		<li>get the first page in easydb that contains the accession number ZFMK-TIS-48: <br /><a href="${applicationurl}/easyPage?search=ZFMK-TIS-48">${applicationurl}/easyPage?search=ZFMK-TIS-48</a></li>
+	</ul>
+	
+	
+	
+
+
+</body>
+</html>
+

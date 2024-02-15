@@ -1,0 +1,19 @@
+###
+# app configuration
+###
+[easydb_user]
+# optional if a certain non-anonymous login is needed (otheriese leave this section empty)
+
+[easydb_api]
+baseurl = @@BASEURL@@
+# params accepted in url
+acceptedparams = search, type, filename, page, pagesize
+sslverify = True
+# IP address of DiversityWorkbench hosts. Used to deliver always the smallest image to DWB
+diversity_workbench_host_ip = @@DC_HOST_IP@@
+
+[DEFAULT]
+# IP networks declared as intern (for usage of the easyDB tag "Intern (Preview)" and "Intern (Original)")
+# format: 123.456.78.9/24
+ip_intern = [@@IP_INTERN@@]
+tags_extern = [@@TAGS_EXTERN@@]

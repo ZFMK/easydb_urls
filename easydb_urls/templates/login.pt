@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en"
+xmlns:tal="http://xml.zope.org/namespaces/tal"
+xmlns:metal="http://xml.zope.org/namespaces/metal">
+
+<head>
+	<title>Login to easydb API</title>
+	<link rel="stylesheet" type="text/css" href="${request.static_url('easydb_urls:static/css/local.css')}">
+	<link rel="stylesheet" type="text/css" href="${request.static_url('easydb_urls:static/css/page.css')}">
+    <link rel="shortcut icon" type="image/png" href="/favicon.ico" id="favicon"/>
+
+</head>
+
+<body>
+	
+<div id="login">
+<h2>Login</h2>
+	<form action="${request.application_url}/sessionlogin" method="post">
+		<label for="user">User</label><br/>
+		<input type="text" id="user"
+			name="user"
+			value="${user}"/><br/>
+		<label for="password">Password</label><br/>
+		<input type="password" id="password"
+			name="password"
+			value=""/><br/>
+		<input type="submit" name="form.submitted"
+			value="Log In"/>
+	</form>
+</div>
+
+</body>
+

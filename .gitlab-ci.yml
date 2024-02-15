@@ -1,0 +1,33 @@
+stages:
+  - build
+
+variables:
+  BASE_DIR: "/easydb_urls"
+  INSTALL_DIR: "${BASE_DIR}/"
+  REGISTRY_URL: "docker.leibniz-lib.de:5000"
+  REGISTRY_PROJECT_NAME: "easydb_urls"
+  REGISTRY_TAG: "latest"
+
+get_source:
+  stage: build
+  script:
+    - echo "Build Docker image with base dir ${BASE_DIR} for commit '${CI_COMMIT_MESSAGE}'"
+    - docker login ${REGISTRY_URL}
+    - docker build --build-arg BASE_DIR="$BASE_DIR" --build-arg CACHE="$CI_COMMIT_SHA" --build-arg EXPOSE_PORT="${PYRAMID_PORT}" -t ${REGISTRY_URL}/${REGISTRY_PROJECT_NAME}:${REGISTRY_TAG} .
+    - docker push ${REGISTRY_URL}/${REGISTRY_PROJECT_NAME}:${REGISTRY_TAG}
+    - echo "`docker inspect --format='{{index .RepoDigests 0}}' ${REGISTRY_URL}/${REGISTRY_PROJECT_NAME}:${REGISTRY_TAG}`"
+  before_script:
+    - sed "s/@@PYRAMID_PORT@@/${PYRAMID_PORT}/g" production.ini.org > production.ini
+    - sed "s/@@DC_HOST_IP@@/${DC_HOST_IP}/g" easydb_urls/config.txt > easydb_urls/config.ini
+    - sed -i "s/@@BASEURL@@/${BASEURL}/g" easydb_urls/config.ini
+    - sed -i "s/@@IP_INTERN@@/${IP_INTERN}/g" easydb_urls/config.ini
+    - sed -i "s/@@TAGS_EXTERN@@/${TAGS_EXTERN}/g" easydb_urls/config.ini
+    - grep -RiIl 'import pudb'| xargs sed -i 's/import pudb//g'
+    - grep -RiIl 'pudb.set_trace()' | xargs sed -i 's/pudb.set_trace()//g'
+    - export TS=$(echo `date +%Y%d%m`)
+    - export PYRAMID_PORT=${PYRAMID_PORT}
+  environment:
+    name: production
+  only:
+    - master
+  #when: manual
